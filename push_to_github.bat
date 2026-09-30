@@ -38,10 +38,10 @@ git remote add origin https://github.com/shakyasagar166/food-delivery-java-fulls
 echo [OK] Remote set to: https://github.com/shakyasagar166/food-delivery-java-fullstack.git
 echo.
 
-echo [4/5] Staging files (excluding heavy build cache like target & node_modules)...
+echo [4/5] Staging files and cloud Dockerfile...
 git add .
-git commit -m "feat: Full-Stack Food Delivery System (Spring Boot 3 + React + MySQL + Razorpay)"
-echo [OK] Commit created.
+git commit -m "fix(cloud): add root Dockerfile for Render cloud deployment" || echo Already up to date
+echo [OK] Commit ready.
 echo.
 
 echo [5/5] Pushing to GitHub...
