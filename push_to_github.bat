@@ -40,7 +40,7 @@ echo.
 
 echo [4/5] Staging files and cloud Dockerfile...
 git add .
-git commit -m "feat(db): enable zero-config embedded database (MySQL mode) for instant cloud deployment" || echo Already up to date
+git commit -m "fix(react): set CI=false in build script for Vercel deployment" || echo Already up to date
 echo [OK] Commit ready.
 echo.
 
