@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping({"/auth", "/api/auth"})
 public class AuthController {
 
 	private UserRepository userRepository;
