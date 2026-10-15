@@ -37,10 +37,10 @@ public class User {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Order> orders;
 
-	@ElementCollection
+	@ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
 	private List<RestaurantDto> favorites=new ArrayList<>();
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = jakarta.persistence.FetchType.EAGER)
 	private List<Address> addresses = new ArrayList<>();
 	
 	private String status;

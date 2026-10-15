@@ -46,7 +46,7 @@ public class Restaurant {
     
     private int numRating;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(length = 1000)
     private List<String> images;
    

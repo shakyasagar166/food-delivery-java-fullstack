@@ -28,7 +28,7 @@ public class Food {
     private Category foodCategory;
 
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(length = 1000)
     private List<String> images;
 
