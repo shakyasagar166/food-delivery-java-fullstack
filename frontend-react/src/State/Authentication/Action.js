@@ -20,21 +20,23 @@ import { API_URL, api } from "../../config/api";
 import axios from "axios";
 
 export const registerUser = (reqData) => async (dispatch) => {
-  console.log("resgister request data ",reqData.userData)
+  console.log("register request data ", reqData.userData);
   try {
     dispatch({ type: REGISTER_REQUEST });
 
     const { data } = await axios.post(`${API_URL}/auth/signup`, reqData.userData);
-    if(data.jwt) localStorage.setItem("jwt",data.jwt)
-    if(data.role==="ROLE_RESTAURANT_OWNER"){
-      reqData.navigate("/admin/restaurant")
+    if (data.jwt) {
+      localStorage.setItem("jwt", data.jwt);
+      dispatch(getUser(data.jwt));
     }
-    else{
-      reqData.navigate("/")
+    if (data.role === "ROLE_RESTAURANT_OWNER") {
+      reqData.navigate("/admin/restaurant");
+    } else {
+      reqData.navigate("/");
     }
     dispatch({ type: REGISTER_SUCCESS, payload: data.jwt });
   } catch (error) {
-    console.log("catch error ------ ",error)
+    console.log("catch error ------ ", error);
     dispatch({
       type: REGISTER_FAILURE,
       payload:
@@ -50,14 +52,16 @@ export const loginUser = (reqData) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
 
     const { data } = await axios.post(`${API_URL}/auth/signin`, reqData.data);
-    if(data.jwt) localStorage.setItem("jwt",data.jwt)
-    if(data.role==="ROLE_RESTAURANT_OWNER"){
-      reqData.navigate("/admin/restaurant")
+    if (data.jwt) {
+      localStorage.setItem("jwt", data.jwt);
+      dispatch(getUser(data.jwt));
     }
-    else{
-      reqData.navigate("/")
+    if (data.role === "ROLE_RESTAURANT_OWNER") {
+      reqData.navigate("/admin/restaurant");
+    } else {
+      reqData.navigate("/");
     }
-    
+
     dispatch({ type: LOGIN_SUCCESS, payload: data.jwt });
   } catch (error) {
     dispatch({
@@ -70,7 +74,6 @@ export const loginUser = (reqData) => async (dispatch) => {
   }
 };
 
-
 export const getUser = (token) => {
   return async (dispatch) => {
     dispatch({ type: GET_USER_REQUEST });
@@ -81,7 +84,7 @@ export const getUser = (token) => {
         },
       });
       const user = response.data;
-      
+
       dispatch({ type: GET_USER_SUCCESS, payload: user });
       console.log("req User ", user);
     } catch (error) {
@@ -91,19 +94,23 @@ export const getUser = (token) => {
   };
 };
 
-export const addToFavorites = ({restaurantId,jwt}) => {
+export const addToFavorites = ({ restaurantId, jwt }) => {
   return async (dispatch) => {
     dispatch({ type: ADD_TO_FAVORITES_REQUEST });
     try {
-      const { data } = await api.put(`api/restaurants/${restaurantId}/add-favorites`,{},{
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      console.log("Add to favorites ",data)
+      const { data } = await api.put(
+        `api/restaurants/${restaurantId}/add-favorites`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log("Add to favorites ", data);
       dispatch({ type: ADD_TO_FAVORITES_SUCCESS, payload: data });
     } catch (error) {
-      console.log("catch error ",error)
+      console.log("catch error ", error);
       dispatch({
         type: ADD_TO_FAVORITES_FAILURE,
         payload: error.message,
@@ -113,32 +120,38 @@ export const addToFavorites = ({restaurantId,jwt}) => {
 };
 
 export const resetPasswordRequest = (email) => async (dispatch) => {
-  dispatch({type:REQUEST_RESET_PASSWORD_REQUEST});
+  dispatch({ type: REQUEST_RESET_PASSWORD_REQUEST });
   try {
-    const {data} = await axios.post(`${API_URL}/auth/reset-password-request?email=${email}`,{});
-    
+    const { data } = await axios.post(
+      `${API_URL}/auth/reset-password-request?email=${email}`,
+      {}
+    );
+
     console.log("reset password -: ", data);
-   
-    dispatch({type:REQUEST_RESET_PASSWORD_SUCCESS,payload:data});
+
+    dispatch({ type: REQUEST_RESET_PASSWORD_SUCCESS, payload: data });
   } catch (error) {
-    console.log("error ",error)
-    dispatch({type:REQUEST_RESET_PASSWORD_FAILURE,payload:error.message});
+    console.log("error ", error);
+    dispatch({ type: REQUEST_RESET_PASSWORD_FAILURE, payload: error.message });
   }
 };
 
 export const resetPassword = (reqData) => async (dispatch) => {
-  dispatch({type:REQUEST_RESET_PASSWORD_REQUEST});
+  dispatch({ type: REQUEST_RESET_PASSWORD_REQUEST });
   try {
-    const {data} = await axios.post(`${API_URL}/auth/reset-password`,reqData.data);
-    
+    const { data } = await axios.post(
+      `${API_URL}/auth/reset-password`,
+      reqData.data
+    );
+
     console.log("reset password -: ", data);
 
-    reqData.navigate("/password-change-success")
-   
-    dispatch({type:REQUEST_RESET_PASSWORD_SUCCESS,payload:data});
+    reqData.navigate("/password-change-success");
+
+    dispatch({ type: REQUEST_RESET_PASSWORD_SUCCESS, payload: data });
   } catch (error) {
-    console.log("error ",error)
-    dispatch({type:REQUEST_RESET_PASSWORD_FAILURE,payload:error.message});
+    console.log("error ", error);
+    dispatch({ type: REQUEST_RESET_PASSWORD_FAILURE, payload: error.message });
   }
 };
 
@@ -148,6 +161,3 @@ export const logout = () => {
     localStorage.clear();
   };
 };
-
-
-

@@ -1,4 +1,4 @@
-﻿package com.zosh.Exception;
+package com.zosh.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

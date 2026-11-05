@@ -9,33 +9,36 @@ import { getUser } from "./State/Authentication/Action";
 import { findCart } from "./State/Customers/Cart/cart.action";
 import {
   getAllRestaurantsAction,
-  getRestaurantById,
   getRestaurantByUserId,
 } from "./State/Customers/Restaurant/restaurant.action";
+import ChatBot from "./customers/components/ChatBot/ChatBot";
 
 function App() {
   const dispatch = useDispatch();
   const { auth } = useSelector((store) => store);
   const jwt = localStorage.getItem("jwt");
-  
+
   useEffect(() => {
-    
-    if (jwt) {
-      dispatch(getUser(jwt));
-      dispatch(findCart(jwt));
-      dispatch(getAllRestaurantsAction(jwt));
+    const token = auth.jwt || jwt || localStorage.getItem("jwt");
+    if (token) {
+      dispatch(getUser(token));
+      dispatch(findCart(token));
+      dispatch(getAllRestaurantsAction(token));
     }
   }, [auth.jwt]);
 
   useEffect(() => {
-    if (auth.user?.role == "ROLE_RESTAURANT_OWNER") {
-      dispatch(getRestaurantByUserId(auth.jwt || jwt));
+    const token = auth.jwt || jwt || localStorage.getItem("jwt");
+    if (auth.user?.role === "ROLE_RESTAURANT_OWNER" && token) {
+      dispatch(getRestaurantByUserId(token));
     }
   }, [auth.user]);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Routers />
+      <ChatBot />
     </ThemeProvider>
   );
 }

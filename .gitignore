@@ -46,3 +46,8 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Database files
+**/data/
+*.mv.db
+*.trace.db

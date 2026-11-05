@@ -12,10 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,15 +29,16 @@ public class AppConfig {
 
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-                		.requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER","ADMIN")
-                		.requestMatchers("/auth/**", "/api/auth/**").permitAll()
-                                .requestMatchers("/api/**").authenticated()
-                                
+                		.requestMatchers(antMatcher("/api/admin/**")).hasAnyRole("RESTAURANT_OWNER","ADMIN")
+                		.requestMatchers(antMatcher("/auth/**"), antMatcher("/api/auth/**"), antMatcher("/api/ai/**"), antMatcher("/ai/**")).permitAll()
+                                .requestMatchers(antMatcher("/api/**")).authenticated()
+                                .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
                
 		
 		return http.build();
