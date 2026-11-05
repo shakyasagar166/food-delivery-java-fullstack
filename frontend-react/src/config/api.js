@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = (process.env.REACT_APP_API_URL || "http://localhost:5454").replace(/\/+$/, '');
-
+export const API_URL = (process.env.REACT_APP_API_URL || "https://food-delivery-java-fullstack-4.onrender.com").replace(/\/+$/, '');
 
 export const api = axios.create({
   baseURL: API_URL, 
@@ -9,5 +8,3 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-
