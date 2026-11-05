@@ -92,6 +92,7 @@ public class AuthController {
 		// Create new user
 		User createdUser = new User();
 		createdUser.setEmail(email);
+		createdUser.setUsername(email);
 		createdUser.setFullName(fullName);
 		createdUser.setPassword(passwordEncoder.encode(password));
 		createdUser.setRole(role);

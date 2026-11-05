@@ -11,12 +11,13 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -31,6 +32,7 @@ public class User {
 
 	private String fullName;
 	private String email;
+	private String username;
 	private String password;
 
 	private USER_ROLE role;
@@ -46,5 +48,13 @@ public class User {
 	private List<Address> addresses = new ArrayList<>();
 	
 	private String status;
+
+	@PrePersist
+	@PreUpdate
+	public void ensureUsername() {
+		if (this.username == null || this.username.trim().isEmpty()) {
+			this.username = this.email != null ? this.email : "user_" + System.currentTimeMillis();
+		}
+	}
 
 }
