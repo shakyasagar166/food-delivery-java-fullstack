@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import AdminDashboard from "./Dashboard/AdminDashboard";
 import AdminSidebar from "./AdminSidebar";
 import RestaurantDashboard from "./Dashboard/RestaurantDashboard";
 import RestaurantsOrder from "./Orders/RestaurantsOrder";
@@ -18,7 +17,6 @@ import {
 import { getRestaurantsCategory } from "../State/Customers/Restaurant/restaurant.action";
 import Details from "./Details/Details";
 import AdminNavbar from "./AdminNavbar";
-import { getUsersOrders } from "../State/Customers/Orders/Action";
 import { fetchRestaurantsOrder } from "../State/Admin/Order/restaurants.order.action";
 
 const Admin = () => {
@@ -26,7 +24,7 @@ const Admin = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
   const handleOpenSideBar = () => setOpenSideBar(true);
   const handleCloseSideBar = () => setOpenSideBar(false);
-  const { auth, restaurant, ingredients } = useSelector((store) => store);
+  const { auth, restaurant } = useSelector((store) => store);
   const jwt = localStorage.getItem("jwt");
   useEffect(() => {
     if (restaurant.usersRestaurant) {
@@ -50,6 +48,7 @@ const Admin = () => {
         })
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant.usersRestaurant]);
   return (
     <div>
